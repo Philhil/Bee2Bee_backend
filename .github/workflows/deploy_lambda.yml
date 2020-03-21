@@ -20,7 +20,7 @@ jobs:
           cd pydeps 
           zip -r9 ${OLDPWD}/function.zip . 
           cd $OLDPWD/src 
-          zip -g function.zip .
+          zip -g ${OLDPWD}/function.zip .
       - name: show zip content
         run: unzip -l function.zip
       - name: default deploy
