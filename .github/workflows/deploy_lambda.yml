@@ -8,8 +8,14 @@ jobs:
     steps:
       - name: checkout source code
         uses: actions/checkout@v1
+      - name: setup venv
+        run: python3 -m venv v-env && source v-env/bin/activate
+      - name: install dependencies
+        run: pip install -r requirements.txt && deactivate
+      - name: zip dependencies
+        run: cd v-env/lib/*/site-packages && zip -r9 ${OLDPWD}/function.zip .      
       - name: zip source code
-        run: zip function.zip src/* 
+        run: cd $OLDPWD && zip -g function.zip src/*       
       - name: default deploy
         uses: appleboy/lambda-action@master
         with:
