@@ -20,6 +20,7 @@ jobs:
           cd pydeps 
           zip -r9 ${GITHUB_WORKSPACE}/function.zip . 
           cd ${GITHUB_WORKSPACE}/src 
+          ls -la
           zip -g ${GITHUB_WORKSPACE}/function.zip .
       - name: show zip content
         run: unzip -l function.zip
