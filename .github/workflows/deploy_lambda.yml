@@ -32,3 +32,11 @@ jobs:
           aws_region: eu-central-1
           function_name: api-1-003-a-bee2bee
           zip_file: function.zip
+      - name: action-slack    
+      - uses: 8398a7/action-slack@v2
+        with:
+          status: ${{ job.status }}
+          author_name: Integration Test # default: 8398a7@action-slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
