@@ -9,7 +9,7 @@ def index():
 
 
 @app.route('/foo')
-def index():
+def foo():
     return jsonify(status=200, message='foo is OK')
 
 def lambda_handler(event, context):
