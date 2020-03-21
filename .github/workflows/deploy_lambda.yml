@@ -15,8 +15,8 @@ jobs:
         uses: actions/checkout@v1
       - name: install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt  --target pydeps/
+          python3 -m pip install --upgrade pip
+          pip3 install -r requirements.txt  --target pydeps/
       - name: zip dependencies
         run: cd pydeps && zip -r9 ${OLDPWD}/function.zip .      
       - name: zip source code
