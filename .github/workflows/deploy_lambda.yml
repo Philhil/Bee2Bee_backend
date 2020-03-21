@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: install build deps
-        run: sudo apt-get install python3-venv python3-pip 
+        run: sudo apt-get install python3-setuptools python3-pip 
       - name: checkout source code
         uses: actions/checkout@v1
       - name: install dependencies
@@ -15,7 +15,7 @@ jobs:
       - name: zip dependencies
         run: cd pydeps && zip -r9 ${OLDPWD}/function.zip .      
       - name: zip source code
-        run: cd $OLDPWD && zip -g function.zip src/*       
+        run: cd $OLDPWD && zip -g function.zip src/*
       - name: default deploy
         uses: appleboy/lambda-action@master
         with:
