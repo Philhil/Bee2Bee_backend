@@ -13,14 +13,14 @@ jobs:
         run: sudo apt-get install python3-setuptools python3-pip 
       - name: checkout source code
         uses: actions/checkout@v1
-      - name: install dependencies
+      - name: build zip
         run: |
           python3 -m pip install --upgrade pip
           pip3 install -r requirements.txt  --target pydeps/
-      - name: zip dependencies
-        run: cd pydeps && zip -r9 ${OLDPWD}/function.zip .      
-      - name: zip source code
-        run: cd $OLDPWD && zip -g function.zip src/*
+          cd pydeps 
+          zip -r9 ${OLDPWD}/function.zip . 
+          cd $OLDPWD 
+          zip -g function.zip src/*
       - name: default deploy
         uses: appleboy/lambda-action@master
         with:
