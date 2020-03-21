@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from models import db
-from api.routes import api
+from api.routes.company import company_api
 from os import environ
 
 def create_app(config=None):
@@ -33,8 +33,7 @@ def create_app(config=None):
 def setup_app(app):
     db.init_app(app)
 
-    app.register_blueprint(api)
-
+    app.register_blueprint(company_api)
     @app.route('/')
     def index():
         return jsonify(status=200, message='OK')

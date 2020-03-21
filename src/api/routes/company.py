@@ -1,14 +1,12 @@
 from flask import Blueprint, request, jsonify, abort
 from models import db, get_table
-api = Blueprint(__name__, 'api', url_prefix="/api/v0/" )
 
-@api.route('/')
-def home():
-    return 'Hello World!'
+
+company_api = Blueprint(__name__, 'api', url_prefix="/api/v0/company")
 
 
 # test with http POST localhost:5000/api/v0/company body:='{"name": "Bar Ltd"}'
-@api.route('/company', methods=['POST'])
+@company_api.route('/', methods=['POST'])
 def create_company():
     if not request.json:
         abort(400)
