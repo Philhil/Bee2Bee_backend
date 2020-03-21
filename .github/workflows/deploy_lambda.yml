@@ -6,6 +6,8 @@ jobs:
     name: deploy lambda from source
     runs-on: ubuntu-latest
     steps:
+      - name: install build deps
+        run: apt-get install python3-venv python3-pip 
       - name: checkout source code
         uses: actions/checkout@v1
       - name: setup venv
