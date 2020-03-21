@@ -63,6 +63,7 @@ def setup_app(app):
         ins = playground.insert().values(data='{"foo": "bar"')
         conn = db.session.connection()        
         result = conn.execute(ins)
+        db.session.commit()
         return jsonify({"playground_id": result.inserted_primary_key})
         
 

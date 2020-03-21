@@ -26,7 +26,7 @@ def create_company():
     ins = company.insert().values(name=name)
     conn = db.session.connection()        
     result = conn.execute(ins)
-
+    db.session.commit()
     return jsonify({
         "id": result.inserted_primary_key[0],
         "name": name
