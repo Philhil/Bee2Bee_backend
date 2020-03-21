@@ -1,0 +1,5 @@
+deploy:
+  provider: lambda
+  function_name: "api-1-003-a-bee2bee"
+  region: "eu-central-1"
+  runtime: "python3.8"

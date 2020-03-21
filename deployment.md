@@ -1,0 +1,2 @@
+#Deploy
+run at base directory `zip function.zip src/* && aws lambda update-function-code --function-name api-1-003-a-bee2bee --zip-file fileb://function.zip --region eu-central-1 --profile bee2bee && rm function.zip`
