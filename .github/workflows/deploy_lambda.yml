@@ -19,7 +19,7 @@ jobs:
           pip3 install -r requirements.txt  --target ${GITHUB_WORKSPACE}/pydeps/
           cd pydeps 
           zip -r9 ${GITHUB_WORKSPACE}/function.zip . 
-          cd ${GITHUB_WORKSPACE]/src 
+          cd ${GITHUB_WORKSPACE}/src 
           zip -g ${GITHUB_WORKSPACE}/function.zip .
       - name: show zip content
         run: unzip -l function.zip
