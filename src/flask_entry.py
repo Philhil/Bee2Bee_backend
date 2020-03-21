@@ -8,5 +8,9 @@ def index():
     return jsonify(status=200, message='OK')
 
 
+@app.route('/foo')
+def index():
+    return jsonify(status=200, message='foo is OK')
+
 def lambda_handler(event, context):
     return awsgi.response(app, event, context)
