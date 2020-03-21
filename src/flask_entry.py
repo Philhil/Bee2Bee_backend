@@ -1,16 +1,7 @@
 import awsgi
-from flask import Flask, jsonify
+from app import create_app
 
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return jsonify(status=200, message='OK')
-
-
-@app.route('/foo')
-def foo():
-    return jsonify(status=200, message='foo is OK')
+app = create_app()
 
 def lambda_handler(event, context):
     return awsgi.response(app, event, context)
