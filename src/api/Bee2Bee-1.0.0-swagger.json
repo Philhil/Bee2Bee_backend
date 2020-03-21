@@ -1,0 +1,638 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Algorithm-based Employee Exchange Platform Bee2Bee API",
+    "version" : "1.0.0",
+    "title" : "Algorithm-based Employee Exchange Platform Bee2Bee API",
+    "contact" : {
+      "url" : "https://github.com/vinzBad/Bee2Bee_backend"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "user",
+    "description" : ""
+  }, {
+    "name" : "company",
+    "description" : "Firma"
+  }, {
+    "name" : "posting",
+    "description" : "Posting"
+  }, {
+    "name" : "skill",
+    "description" : ""
+  } ],
+  "paths" : {
+    "/user" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Create a new user",
+        "description" : "",
+        "operationId" : "addUser",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "User object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "return the newly created user object",
+            "schema" : {
+              "$ref" : "#/definitions/User"
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "405" : {
+            "description" : "Validation exception"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "user" ],
+        "summary" : "Update an existing user",
+        "description" : "",
+        "operationId" : "updateUser",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "User object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "User not found"
+          },
+          "405" : {
+            "description" : "Validation exception"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/user/{userId}" : {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Find user by ID",
+        "description" : "Returns a single user",
+        "operationId" : "getUserById",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "ID of User to return",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/User"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "User not found"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "user" ],
+        "summary" : "Deletes a user",
+        "description" : "",
+        "operationId" : "deleteUser",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "api_key",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User id to delete",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "boolean"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "User not found"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/user/assign/{companyId}" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "parameters" : [ {
+          "name" : "companyId",
+          "in" : "path",
+          "description" : "ID of a Company to assign to",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Assign user to a company",
+            "schema" : {
+              "type" : "boolean"
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "405" : {
+            "description" : "Validation exception"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/company" : {
+      "post" : {
+        "tags" : [ "company" ],
+        "summary" : "Add a new company",
+        "description" : "",
+        "operationId" : "addCompany",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Company object that represent a Employee holding institution",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Company"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "return the newly created company",
+            "schema" : {
+              "$ref" : "#/definitions/Company"
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "405" : {
+            "description" : "Validation exception"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "company" ],
+        "summary" : "Update an existing company",
+        "description" : "",
+        "operationId" : "updateCompany",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Company object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Company"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Company not found"
+          },
+          "405" : {
+            "description" : "Validation exception"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/company/{companyId}" : {
+      "get" : {
+        "tags" : [ "company" ],
+        "summary" : "Find company by ID",
+        "description" : "Returns a single company",
+        "operationId" : "getCompanyById",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "companyId",
+          "in" : "path",
+          "description" : "ID of Company to return",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Company"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Company not found"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "company" ],
+        "summary" : "Deletes a company",
+        "description" : "",
+        "operationId" : "deleteCompany",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "api_key",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "companyId",
+          "in" : "path",
+          "description" : "Company id to delete",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "boolean"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Company not found"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/posting" : {
+      "post" : {
+        "tags" : [ "posting" ],
+        "summary" : "Create a new posting",
+        "description" : "",
+        "operationId" : "addPosting",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Posting object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Posting"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "return the newly created posting object",
+            "schema" : {
+              "$ref" : "#/definitions/Posting"
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "405" : {
+            "description" : "Validation exception"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "posting" ],
+        "summary" : "Update an existing posting",
+        "description" : "",
+        "operationId" : "updatePosting",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Posting object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Posting"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Posting not found"
+          },
+          "405" : {
+            "description" : "Validation exception"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/posting/{postingId}" : {
+      "get" : {
+        "tags" : [ "posting" ],
+        "summary" : "Find posting by ID",
+        "description" : "Returns a single posting",
+        "operationId" : "getPostingById",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "postingId",
+          "in" : "path",
+          "description" : "ID of posting to return",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Posting"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Posting not found"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "posting" ],
+        "summary" : "Deletes a posting",
+        "description" : "",
+        "operationId" : "deletePosting",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "api_key",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "postingId",
+          "in" : "path",
+          "description" : "Posting id to delete",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "boolean"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Posting not found"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/posting/{type}/{longitude}/{latitude}/{radius}" : {
+      "get" : {
+        "tags" : [ "posting" ],
+        "summary" : "Find demands in a specitif region",
+        "description" : "Returns a array of demands",
+        "operationId" : "getDemandsByLocation",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "type",
+          "in" : "path",
+          "description" : "type of posting (1 = demand, 2 = holding) longitude coordinate of search region",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "longitude",
+          "in" : "path",
+          "description" : "center longitude coordinate of search region",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "latitude",
+          "in" : "path",
+          "description" : "center latitude coordinate of search region",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "radius",
+          "in" : "path",
+          "description" : "radius of search region in KM",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Posting"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Posting not found"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "bee2bee_auth" : {
+      "type" : "oauth2",
+      "authorizationUrl" : "https://.../oauth/dialog",
+      "flow" : "implicit"
+    },
+    "api_key" : {
+      "type" : "apiKey",
+      "name" : "api_key",
+      "in" : "header"
+    }
+  },
+  "definitions" : {
+    "Company" : {
+      "type" : "object",
+      "required" : [ "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Bee2Bee Company"
+        }
+      }
+    },
+    "User" : {
+      "required" : [ "name", "first_name" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer"
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Nachname"
+        },
+        "first_name" : {
+          "type" : "string",
+          "example" : "Vorname"
+        },
+        "secret" : {
+          "type" : "string",
+          "example" : "hashed pass"
+        },
+        "email" : {
+          "type" : "string",
+          "example" : "test@test.de"
+        }
+      }
+    },
+    "Posting" : {
+      "required" : [ "companyId", "description", "zipCode", "location" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer"
+        },
+        "companyId" : {
+          "type" : "integer"
+        },
+        "description" : {
+          "type" : "string",
+          "example" : "detailed description of this demand"
+        },
+        "zipCode" : {
+          "type" : "string",
+          "example" : "70499"
+        },
+        "location" : {
+          "type" : "string",
+          "example" : "Stuttgart"
+        },
+        "persons" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "countPersons" : {
+                "type" : "integer"
+              },
+              "array" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "integer"
+                }
+              }
+            }
+          },
+          "example" : "[{ 5: [SkillID1, SkillID1] }, { 1: [SkillID8] }]"
+        },
+        "type" : {
+          "type" : "integer",
+          "description" : "type of Post",
+          "enum" : [ "1 demand", "2 holding" ],
+          "example" : "2"
+        },
+        "start_time" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Start of Job",
+          "example" : "2020-03-16T08:00:00"
+        },
+        "daterage" : {
+          "type" : "string",
+          "description" : "Daterange till Job is offered/ person is available",
+          "example" : "???"
+        }
+      }
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/Bee2Bee/Bee2Bee/1.0.0",
+  "schemes" : [ "https" ]
+}
