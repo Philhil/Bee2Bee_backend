@@ -28,6 +28,6 @@ def create_company():
     result = conn.execute(ins)
 
     return jsonify({
-        "id": result.inserted_primary_key,
+        "id": result.inserted_primary_key[0],
         "name": name
         })
