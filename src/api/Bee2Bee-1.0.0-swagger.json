@@ -594,23 +594,15 @@
           "type" : "string",
           "example" : "Stuttgart"
         },
-        "persons" : {
+        "skills" : {
           "type" : "array",
-          "items" : {
-            "type" : "object",
-            "properties" : {
-              "countPersons" : {
-                "type" : "integer"
-              },
-              "array" : {
-                "type" : "array",
-                "items" : {
-                  "type" : "integer"
-                }
-              }
-            }
-          },
-          "example" : "[{ 5: [SkillID1, SkillID1] }, { 1: [SkillID8] }]"
+          "description": "Array of Skill IDs",
+          "example" : "[1, 2]"
+        },
+        "persons" : {
+          "type": "integer",
+          "description": "number of persons",
+          "example": 5
         },
         "type" : {
           "type" : "integer",
@@ -621,8 +613,14 @@
         "start_time" : {
           "type" : "string",
           "format" : "date-time",
-          "description" : "Start of Job",
-          "example" : "2020-03-16T08:00:00"
+          "description" : "Everyday Start Time of Job",
+          "example" : "08:00:00"
+        },
+        "end_time" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Everyday End Time of Job",
+          "example" : "08:00:00"
         },
         "daterage" : {
           "type" : "string",
