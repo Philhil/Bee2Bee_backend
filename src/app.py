@@ -54,3 +54,16 @@ def setup_app(app):
         result = conn.execute(s)
         return jsonify(result.fetchone()["name"])
 
+    @app.route('/dbtest_insert')
+    def dbtest_insert():
+        from sqlalchemy.sql import insert
+        from sqlalchemy import Table
+        # select * from skills where skillset_id = 4;
+        playground = Table('playground', db.metadata, autoload=True, autoload_with=db.engine) 
+        ins = playground.insert().values(data='{"foo": "bar"')
+        conn = db.session.connection()        
+        result = conn.execute(ins)
+        return jsonify({"playground_id": result.inserted_primary_key})
+        
+
+
