@@ -45,7 +45,7 @@ def create_company():
     if has_address_info:
         company_data['address_id'] = address_id
 
-    ins = company.insert().values(name=name)
+    ins = company.insert().values(name=name, address_id=address_id)
     result = conn.execute(ins)
     db.session.commit()
 
