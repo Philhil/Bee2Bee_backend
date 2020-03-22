@@ -14,8 +14,8 @@ def create_position():
     if not "body" in data:
         abort(405)   
 
-    #requiredKeys = ["companyId", "title", "description", "zipCode", "city", "type", "start_time", "end_time", "persons", "daterange"]
-    requiredKeys = ["companyId", "title", "description", "zipCode", "city", "type", "street", "houseNr", "persons"]
+    #requiredKeys = ["companyId", "title", "description", "zipCode", "city", "type", "start_time", "end_time", "persons", "daterange", "price"]
+    requiredKeys = ["companyId", "title", "description", "zipCode", "city", "type", "street", "persons", "price"]
 
     for key in requiredKeys:
         if not key in data["body"]:
@@ -26,19 +26,19 @@ def create_position():
     company = get_table('company')
     address = get_table('address')
     
-    zipCode = data["body"]["zipCode"]
+    zip_code = data["body"]["zipCode"]
     city = data["body"]["city"]
     street = data["body"]["street"]
-    houseNr = data["body"]["houseNr"]
-    state = data["body"]["state"]
-    country = data["body"].get("country", "GERMANY")
+    house_nr = data["body"].get("houseNr")
+    state = data["body"].get("state")
+    country = data["body"].get("country", "de-DE")
 
     address_id = None
     ins = address.insert().values(
-        zip_code=zipCode,
+        zip_code=zip_code,
         city=city,
         street=street,
-        house_nr=houseNr,
+        house_nr=house_nr,
         state=state,
         country=country,
     )
@@ -54,25 +54,21 @@ def create_position():
     endTime = data["body"].get("end_time")
     persons = data["body"]["persons"]
     daterange = data["body"].get("daterange")
-    traveling = None
-    radius = None
-    if "traveling" in data["body"]:
-        traveling = data["body"]["traveling"]
-        if "radius" in data["body"]:
-            radius = data["body"]["radius"]
-    
+    traveling = data["body"].get("traveling")
+    radius = data["body"].get("radius")
+    skills = data["body"].get("skills")
+
     position = get_table('position')
-    ins = position.insert().values(company_id=companyId, title=title, description=description, state_id=positionType, start_time=startTime, end_time=endTime, daterange=daterange, address_id=address_id, traveling=traveling, radius=radius, num_pers=persons, price=price)
+    ins = position.insert().values(company_id=companyId, title=title, description=description, state_id=positionType, start_time=startTime, end_time=endTime, daterange=daterange, address_id=address_id, traveling=traveling, radius=radius, num_pers=persons, price=price, skills=skills)
     result = conn.execute(ins)
     position_id = result.inserted_primary_key[0]
 
 
-    skills = data["body"].get("skills")
-    positionSkill = get_table('position_skill')
-    if skills:
-        for skill in skills:
-            ins = positionSkill.insert().values(position_id=position_id, skill_id=skill)
-            result = conn.execute(ins)
+    #positionSkill = get_table('position_skill')
+    #if skills:
+    #    for skill in skills:
+    #        ins = positionSkill.insert().values(position_id=position_id, skill_id=skill)
+    #        result = conn.execute(ins)
     
 
     db.session.commit()
@@ -83,9 +79,8 @@ def create_position():
         })
 
 
-@posting_api.route("/get_all/")
+@posting_api.route("/get-all/")
 def get_all_postings():
-    
 
     with db.engine.begin() as conn:
         position = get_table('position')
@@ -108,11 +103,13 @@ def get_all_postings():
     for row in result:
         posting_data = {}
         for key, value in row.items():
-            if value.__class__.__name__ == 'DateRange':
+            if key == 'daterange':
                 value = "NOT_SUPPORTED" #FIXME
-            if value.__class__.__name__ == 'time':
+            if key == 'start_time':
+                value = "NOT_SUPPORTED" #FIXME
+            if key == 'end_time':
                 value = "NOT_SUPPORTED" #FIXME
             posting_data[key] = value
         result_data['postings'].append(posting_data)
-
+    print(result_data)
     return jsonify(result_data)
