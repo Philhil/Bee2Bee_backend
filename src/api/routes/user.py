@@ -1,9 +1,10 @@
 from flask import Blueprint, request, jsonify, abort, Response
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, get_table
 
 from sqlalchemy.sql import select
 from sqlalchemy import Table
+import secrets
 
 user_api = Blueprint(__name__, 'api', url_prefix="/api/v0/user" )
 
@@ -20,6 +21,7 @@ def user_post():
     for key in requiredKeys:
         if not key in json_data:
             abort(405)
+    session_key = secrets.token_hex()
 
     if len(json_data['email']) == 0:
         abort(405)
@@ -36,6 +38,7 @@ def user_post():
             email=json_data.get('email'),
             name=json_data.get('name'),
             pwd=generate_password_hash(json_data.get('secret', "hunter2")), # Password is optional for POC
+            session_key=session_key,
             company_id=json_data.get('company_id')
         )
         result = conn.execute(ins)
@@ -45,7 +48,8 @@ def user_post():
         'id': result.inserted_primary_key[0],
         'company_id': json_data.get('company_id'),
         'name': json_data.get('name', ''),
-        'email': json_data.get('email')
+        'email': json_data.get('email'),
+        'token': json_data.get('session_key')
     } 
 
     return jsonify(output_user)
@@ -64,9 +68,8 @@ def get_user(userid):
             user.c.id,
             user.c.name,
             user.c.email,
-            user.c.company_id
-            ],
-            user.c.id == userid
+            user.c.company_id],
+            user.c.id == userid # TODO: Check token
         )
         result = conn.execute(sel)
         data = result.fetchone()
