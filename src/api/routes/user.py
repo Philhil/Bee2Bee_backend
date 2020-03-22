@@ -7,7 +7,7 @@ from sqlalchemy import Table
 user_api = Blueprint(__name__, 'api', url_prefix="/api/v0/user" )
 
 @user_api.route('/', methods=['POST'])
-def user_data():
+def user_post():
     # Check input for errors
     if not request.json:
         abort(400)
@@ -49,6 +49,11 @@ def user_data():
 
     return jsonify(output_user)
 
+@user_api.route('/', methods=['PUT'])
+def user_put():
+    # TODO
+    abort(400)
+
 @user_api.route('/<int:userid>/', methods=['GET'])
 # test with http GET localhost:5000/api/v0/user/12/
 def get_user(userid):
@@ -83,3 +88,8 @@ def get_user(userid):
         'secret': data['pwd']
     }
     return jsonify(output_user)
+
+@user_api.route('/<int:userid>/', methods=['DELETE'])
+def delete_user(userid):
+    # TODO
+    abort(400)
