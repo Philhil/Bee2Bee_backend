@@ -173,6 +173,22 @@ def get_posting(posting_id):
 
     return jsonify(get_api_posting(posting_data,address_data))
 
+@posting_api.route('/<int:posting_id>/', methods=['DELETE'])
+# test with http GET localhost:5000/api/v0/posting/12/
+def remove_posting(posting_id):
+    if type(posting_id) is not int:
+        abort(400)
+
+    # Delete data in db
+    with db.engine.begin() as conn:
+        position = get_table('position')
+        delete = position.delete().where(position.c.id == posting_id)
+        result = conn.execute(delete)
+
+    if result.rowcount == 0:
+        abort(404)
+    return jsonify(True)
+
 @posting_api.route("/get-all/")
 # Test: http GET localhost:5000/api/v0/posting/get-all/
 def get_all_postings():
