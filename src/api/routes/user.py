@@ -87,3 +87,52 @@ def get_user(userid):
     } 
 
     return jsonify(output_user)
+
+
+@user_api.route('/auth', methods=['POST'])
+def user_auth():
+    # Check input for errors
+    if not request.json:
+        abort(400)
+    data = request.json
+
+    if not "body" in data:
+        abort(405)
+
+    # Check if all requiredKeys are there
+    requiredKeys = ["email", "secret"]
+    for key in requiredKeys:
+        if not key in data["body"]:
+            abort(405)
+
+    with db.engine.begin() as conn:
+        user = get_table('user')
+        sel = select([
+            user.c.pwd
+        ], user.c.email == data["body"]["email"])
+        result = conn.execute(sel)
+        user_data = result.fetchone()
+
+    if user_data == None:
+        abort(404)
+    print(check_password_hash(user_data["pwd"], data["body"]["secret"]))
+    if not check_password_hash(user_data["pwd"], data["body"]["secret"]):
+        abort(403)
+
+    session_key = secrets.token_hex()
+
+    json_data = data["body"]
+
+    # Insert data to db
+    with db.engine.begin() as conn:
+        user = get_table('user')
+        ins = user.update().values(
+            session_key=session_key,
+        )
+        result = conn.execute(ins)
+
+    # Generate output json
+    output_user = {}
+    output_user['token'] = session_key
+
+    return jsonify(output_user)
