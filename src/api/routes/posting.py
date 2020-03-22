@@ -14,7 +14,9 @@ def create_position():
     if not "body" in data:
         abort(405)   
 
-    requiredKeys = ["companyId", "title", "description", "zipCode", "city", "type", "start_time", "end_time", "persons", "daterange"]
+    #requiredKeys = ["companyId", "title", "description", "zipCode", "city", "type", "start_time", "end_time", "persons", "daterange"]
+    requiredKeys = ["companyId", "title", "description", "zipCode", "city", "type", "street", "houseNr", "persons"]
+
     for key in requiredKeys:
         if not key in data["body"]:
          abort(405)    
@@ -29,7 +31,7 @@ def create_position():
     street = data["body"]["street"]
     houseNr = data["body"]["houseNr"]
     state = data["body"]["state"]
-    country = data["body"]["country"]
+    country = data["body"].get("country", "GERMANY")
 
     address_id = None
     ins = address.insert().values(
@@ -48,10 +50,10 @@ def create_position():
     description = data["body"]["description"]
     positionType = data["body"]["type"]
     price = data["body"]["price"]
-    startTime = data["body"]["start_time"]
-    endTime = data["body"]["end_time"]
+    startTime = data["body"].get("start_time")
+    endTime = data["body"].get("end_time")
     persons = data["body"]["persons"]
-    daterange = data["body"]["daterange"]
+    daterange = data["body"].get("daterange")
     traveling = None
     radius = None
     if "traveling" in data["body"]:
@@ -65,11 +67,12 @@ def create_position():
     position_id = result.inserted_primary_key[0]
 
 
-    skills = data["body"]["skills"]
+    skills = data["body"].get("skills")
     positionSkill = get_table('position_skill')
-    for skill in skills:
-        ins = positionSkill.insert().values(position_id=position_id, skill_id=skill)
-        result = conn.execute(ins)
+    if skills:
+        for skill in skills:
+            ins = positionSkill.insert().values(position_id=position_id, skill_id=skill)
+            result = conn.execute(ins)
     
 
     db.session.commit()
