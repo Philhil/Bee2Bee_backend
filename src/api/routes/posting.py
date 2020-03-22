@@ -1,4 +1,6 @@
 from flask import Blueprint, request, jsonify, abort
+from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import DATERANGE
 from models import db, get_table
 
 posting_api = Blueprint(__name__, 'api', url_prefix="/api/v0/posting")
@@ -76,3 +78,38 @@ def create_position():
         "companyId": companyId,
         "description": description 
         })
+
+
+@posting_api.route("/get_all/")
+def get_all_postings():
+    
+
+    with db.engine.begin() as conn:
+        position = get_table('position')
+        address = get_table('address')
+        joint = select([
+            position, 
+            address.c.street, 
+            address.c.house_nr, 
+            address.c.city, 
+            address.c.state, 
+            address.c.country,
+            address.c.zip_code
+            ]).select_from(
+                position.join(address)
+        ) 
+        result = conn.execute(joint)
+
+    result_data = {'postings': []}
+
+    for row in result:
+        posting_data = {}
+        for key, value in row.items():
+            if value.__class__.__name__ == 'DateRange':
+                value = "NOT_SUPPORTED" #FIXME
+            if value.__class__.__name__ == 'time':
+                value = "NOT_SUPPORTED" #FIXME
+            posting_data[key] = value
+        result_data['postings'].append(posting_data)
+
+    return jsonify(result_data)
