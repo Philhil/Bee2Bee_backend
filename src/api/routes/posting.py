@@ -3,7 +3,7 @@ from models import db, get_table
 
 posting_api = Blueprint(__name__, 'api', url_prefix="/api/v0/posting")
 
-# test with http POST localhost:5000/api/v0/posting body:='{"companyId": 4, "title": "testtile", "description": "Testbeschreibung", "zipCode": "83730", "city": "Fischbachau", "type": 1, "start_time": "08:00:00", "end_time": "17:00:00", "daterange": "[2020-01-04, 2020-01-05)", "persons": 5, "skills": [1,2]}'
+# test with http POST localhost:5000/api/v0/posting body:='{"companyId": 4, "title": "testtile", "description": "Testbeschreibung", "price": 15, "zipCode": "83730", "city": "Fischbachau", "type": 1, "start_time": "08:00:00", "end_time": "17:00:00", "daterange": "[2020-01-04, 2020-01-05)", "persons": 5, "skills": [1,2]}'
 @posting_api.route('/', methods=['POST'])
 def create_position():
     if not request.json:
@@ -45,6 +45,7 @@ def create_position():
     title = data["body"]["title"]
     description = data["body"]["description"]
     positionType = data["body"]["type"]
+    price = data["body"]["price"]
     startTime = data["body"]["start_time"]
     endTime = data["body"]["end_time"]
     persons = data["body"]["persons"]
@@ -57,7 +58,7 @@ def create_position():
             radius = data["body"]["radius"]
     
     position = get_table('position')
-    ins = position.insert().values(company_id=companyId, title=title, description=description, state_id=positionType, start_time=startTime, end_time=endTime, daterange=daterange, address_id=address_id, traveling=traveling, radius=radius, num_pers=persons)
+    ins = position.insert().values(company_id=companyId, title=title, description=description, state_id=positionType, start_time=startTime, end_time=endTime, daterange=daterange, address_id=address_id, traveling=traveling, radius=radius, num_pers=persons, price=price)
     result = conn.execute(ins)
     position_id = result.inserted_primary_key[0]
 

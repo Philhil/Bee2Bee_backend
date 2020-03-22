@@ -590,6 +590,10 @@
           "type" : "string",
           "example" : "detailed description of this posting"
         },
+        "price" : {
+          "type" : "integer",
+          "example" : "price per working hour"
+        },
         "zipCode" : {
           "type" : "string",
           "example" : "70499"
