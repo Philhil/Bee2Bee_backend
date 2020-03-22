@@ -55,10 +55,10 @@ def user_post():
     return jsonify(output_user)
 
 
-@user_api.route('/<int:userid>/', methods=['GET'])
+@user_api.route('/<string:token>/', methods=['GET'])
 # test with http GET localhost:5000/api/v0/user/12/
-def get_user(userid):
-    if type(userid) is not int:
+def get_user(session_token):
+    if type(session_token) is not string:
         abort(400)
     
     # Look data in db
@@ -69,7 +69,7 @@ def get_user(userid):
             user.c.name,
             user.c.email,
             user.c.company_id],
-            user.c.id == userid # TODO: Check token
+            user.c.session_key == session_token
         )
         result = conn.execute(sel)
         data = result.fetchone()
@@ -126,7 +126,7 @@ def user_auth():
     # Insert data to db
     with db.engine.begin() as conn:
         user = get_table('user')
-        ins = user.update().values(
+        ins = user.update().where(user.c.email == data["body"]["email"]).values(
             session_key=session_key,
         )
         result = conn.execute(ins)
