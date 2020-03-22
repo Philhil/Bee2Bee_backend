@@ -49,7 +49,7 @@ def user_post():
         'company_id': json_data.get('company_id'),
         'name': json_data.get('name', ''),
         'email': json_data.get('email'),
-        'token': json_data.get('session_key')
+        'token': session_key
     } 
 
     return jsonify(output_user)
