@@ -3,6 +3,7 @@ from models import db, get_table
 
 from sqlalchemy.sql import select
 from sqlalchemy import Table
+import secrets
 
 user_api = Blueprint(__name__, 'api', url_prefix="/api/v0/user" )
 
@@ -18,11 +19,12 @@ def user_post():
         abort(405)
 
     # Check if all requiredKeys are there
-    requiredKeys = ["name", "first_name"]
+    requiredKeys = ["name", "email", "secret", "company_id"]
     for key in requiredKeys:
         if not key in data["body"]:
             abort(405)
-    print('test')
+
+    session_key = secrets.token_hex()
 
     json_data = data["body"]
 
@@ -31,9 +33,9 @@ def user_post():
         user = get_table('user')
         ins = user.insert().values(
             email=json_data.get('email'),
-            firstname=json_data.get('first_name'),
-            lastname=json_data.get('name'),
+            name=json_data.get('name'),
             pwd=json_data.get('secret'),
+            session_key=session_key,
             company_id=json_data.get('company_id')
         )
         result = conn.execute(ins)
@@ -42,8 +44,7 @@ def user_post():
     output_user = {}
     output_user['id'] = result.inserted_primary_key[0]
     output_user['name'] = json_data.get('name')
-    output_user['first_name'] = json_data.get('first_name')
-    output_user['secret'] = json_data.get('secret')
+    output_user['token'] = json_data.get('session_key')
     output_user['email'] = json_data.get('email')
     output_user['company_id'] = json_data.get('company_id')
 
@@ -68,7 +69,7 @@ def get_user(userid):
             user.c.firstname,
             user.c.email,
             user.c.company_id,
-            user.c.pwd],
+            user.c.session_key == token],
             user.c.id == userid
         )
         result = conn.execute(sel)
