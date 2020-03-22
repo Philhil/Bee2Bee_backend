@@ -39,7 +39,7 @@
           "description" : "New User Infos",
           "schema" : {
             "type" : "object",
-            "required" : [ "email", "company_id" ],
+            "required" : [ "email", "company_id", "name", "secret" ],
             "properties" : {
               "email" : {
                 "type" : "string"
@@ -72,17 +72,66 @@
         }
       }
     },
-    "/user/{user_id}" : {
-      "get" : {
+    "/user/auth" : {
+      "post" : {
         "tags" : [ "user" ],
-        "summary" : "Find user by ID",
-        "description" : "Returns a single user",
-        "operationId" : "getUserById",
+        "summary" : "Auth a user",
+        "description" : "",
+        "operationId" : "authUser",
+        "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "name" : "user_id",
+          "in" : "body",
+          "name" : "authUser",
+          "description" : "Auth the user credentials",
+          "schema" : {
+            "type" : "object",
+            "required" : [ "email", "secret" ],
+            "properties" : {
+              "email" : {
+                "type" : "string"
+              },
+              "secret" : {
+                "type" : "string"
+              }
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "login success",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "token" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "403" : {
+            "description" : "login failed"
+          },
+          "405" : {
+            "description" : "Validation exception"
+          }
+        }
+      }
+    },
+    "/user/{token}" : {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Find user by token",
+        "description" : "Returns a single user",
+        "operationId" : "getUserByToken",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "token",
           "in" : "path",
-          "description" : "ID of User to return",
+          "description" : "Session Token of User to return",
           "required" : true,
           "type" : "integer",
           "format" : "int64"
@@ -95,7 +144,7 @@
             }
           },
           "400" : {
-            "description" : "Invalid ID supplied"
+            "description" : "Invalid Token supplied"
           },
           "404" : {
             "description" : "User not found"
@@ -122,7 +171,7 @@
             "type" : "object",
             "required" : [ "name", "address" ],
             "properties" : {
-              "email" : {
+              "name" : {
                 "type" : "string"
               },
               "address" : {
@@ -274,7 +323,7 @@
           "description" : "Posting object",
           "required" : true,
           "schema" : {
-            "$ref" : "#/definitions/Posting"
+            "$ref" : "#/definitions/PostingPut"
           }
         } ],
         "responses" : {
@@ -432,7 +481,7 @@
   "definitions" : {
     "Address" : {
       "type" : "object",
-      "required" : [ "zip_code", "city", "street", "number" ],
+      "required" : [ "zip_code", "city", "street" ],
       "properties" : {
         "zip_code" : {
           "type" : "string"
@@ -450,6 +499,12 @@
           "type" : "string"
         },
         "country" : {
+          "type" : "string"
+        },
+        "longitude" : {
+          "type" : "string"
+        },
+        "latitude" : {
           "type" : "string"
         }
       }
@@ -472,9 +527,12 @@
       }
     },
     "User" : {
-      "required" : [ "email", "id" ],
+      "required" : [ "email", "id", "company_id" ],
       "properties" : {
         "id" : {
+          "type" : "integer"
+        },
+        "company_id" : {
           "type" : "integer"
         },
         "name" : {
@@ -499,6 +557,63 @@
           "type" : "integer"
         },
         "company_id" : {
+          "type" : "integer"
+        },
+        "title" : {
+          "type" : "string",
+          "example" : "title of this posting"
+        },
+        "description" : {
+          "type" : "string",
+          "example" : "detailed description of this posting"
+        },
+        "wage_hourly" : {
+          "type" : "number",
+          "example" : "price per working hour"
+        },
+        "address" : {
+          "$ref" : "#/definitions/Address"
+        },
+        "num_people" : {
+          "type" : "integer",
+          "description" : "number of persons",
+          "example" : 5
+        },
+        "posting_type" : {
+          "$ref" : "#/definitions/PostingType"
+        },
+        "work_time_start" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Everyday Start Time of Job",
+          "example" : "08:00:00"
+        },
+        "work_time_end" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Everyday End Time of Job",
+          "example" : "08:00:00"
+        },
+        "travel_ability_needed" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "travel_radius" : {
+          "type" : "integer",
+          "description" : "km"
+        },
+        "skills" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "PostingPut" : {
+      "required" : [ "id" ],
+      "properties" : {
+        "id" : {
           "type" : "integer"
         },
         "title" : {
