@@ -1,4 +1,4 @@
-# Bee2Bee Backend
+# BeeToBee Backend
 ## Setup local dev environment
 Prerequisites:
 * python 3.8
