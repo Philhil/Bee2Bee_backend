@@ -574,7 +574,7 @@
       }
     },
     "Posting" : {
-      "required" : [ "companyId", "description", "zipCode", "location" ],
+      "required" : [ "companyId", "title", "description", "zipCode", "city" ],
       "properties" : {
         "id" : {
           "type" : "integer"
@@ -582,17 +582,37 @@
         "companyId" : {
           "type" : "integer"
         },
+        "title" : {
+          "type" : "string",
+          "example" : "title of this posting"
+        },
         "description" : {
           "type" : "string",
-          "example" : "detailed description of this demand"
+          "example" : "detailed description of this posting"
         },
         "zipCode" : {
           "type" : "string",
           "example" : "70499"
         },
-        "location" : {
+        "city" : {
           "type" : "string",
           "example" : "Stuttgart"
+        },
+        "street" : {
+          "type" : "string",
+          "example" : "Bahnhofsstraße"
+        },
+        "houseNr" : {
+          "type" : "string",
+          "example" : "14A"
+        },
+        "state" : {
+          "type" : "string",
+          "example" : "Bayern"
+        },
+        "country" : {
+          "type" : "string",
+          "example" : "de-DE"
         },
         "skills" : {
           "type" : "array",
@@ -625,7 +645,7 @@
         "daterage" : {
           "type" : "string",
           "description" : "Daterange till Job is offered/ person is available",
-          "example" : "???"
+          "example" : "[2020-01-04, 2020-01-05)"
         }
       }
     }

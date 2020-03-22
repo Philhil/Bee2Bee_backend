@@ -28,7 +28,6 @@ def create_app(config=None):
         db_config = { key: environ[key] for key in db_config.keys() }
         app.config['SQLALCHEMY_DATABASE_URI'] = "{DB_DRIVER}://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}".format(**db_config)
 
-
     setup_app(app)
     return app
 
