@@ -198,8 +198,11 @@
           "description" : "New Company Infos",
           "schema" : {
             "type" : "object",
-            "required" : [ "title", "address", "posting_type" ],
+            "required" : [ "title", "address", "posting_type", "company_id" ],
             "properties" : {
+              "company_id" : {
+                "type" : "integer"
+              },
               "title" : {
                 "type" : "string"
               },
